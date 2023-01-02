@@ -3,7 +3,7 @@
 
 # @egomobile/openapi-schema-validator
 
-> Additional and strict validation of OpenAPI documents in context of [@egomobile/http-server](https://github.com/egomobile/node-http-server.
+> Additional and strict validation of OpenAPI documents in context of [@egomobile/http-server](https://github.com/egomobile/node-http-server).
 
 <a name="toc"></a>
 
