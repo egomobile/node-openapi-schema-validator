@@ -232,7 +232,7 @@ export async function validateSwaggerDocument(options: IValidateSwaggerDocumentO
                         operationId
                     } = operation;
 
-                    if (operationId === "string") {
+                    if (typeof operationId === "string") {
                         const addOperationId = () => {
                             alreadyUsedOperationIds.push({
                                 "id": operationId,
@@ -260,7 +260,7 @@ export async function validateSwaggerDocument(options: IValidateSwaggerDocumentO
 
                                 addOperationError(
                                     "operation.operationId",
-                                    `Operation ID already defined for '${otherControllerMethod.name}' in '${otherControllerMethod.controller.__file}'`
+                                    `Already defined for '${otherControllerMethod.name}' in '${otherControllerMethod.controller.__file}'`
                                 );
                             }
                             else {
@@ -270,7 +270,7 @@ export async function validateSwaggerDocument(options: IValidateSwaggerDocumentO
                     }
                     else {
                         // invalid data type
-                        addOperationError("operation.operationId", "ID is no string");
+                        addOperationError("operation.operationId", "No string");
                     }
                 }
 

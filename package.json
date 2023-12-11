@@ -1,6 +1,6 @@
 {
     "name": "@egomobile/openapi-schema-validator",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "description": "Additional and strict validation of OpenAPI documents in context of @egomobile/http-server.",
     "main": "lib/index.js",
     "engines": {
