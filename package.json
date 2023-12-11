@@ -1,10 +1,10 @@
 {
     "name": "@egomobile/openapi-schema-validator",
-    "version": "0.1.1",
+    "version": "0.2.0",
     "description": "Additional and strict validation of OpenAPI documents in context of @egomobile/http-server.",
     "main": "lib/index.js",
     "engines": {
-        "node": ">=16.0.0"
+        "node": ">=18.0.0"
     },
     "scripts": {
         "build": "del ./lib && tsc",
@@ -49,23 +49,22 @@
         "README.md"
     ],
     "devDependencies": {
-        "@egomobile/http-server": "^0.54.0",
+        "@egomobile/http-server": "^0.65.0",
         "@egomobile/tsconfig": "^5.0.0",
         "@types/node": "16.18.10",
-        "del-cli": "5.0.0",
-        "eslint": "8.30.0",
-        "eslint-config-ego": "^0.17.1",
-        "nodemon": "2.0.20",
-        "ts-node": "10.9.1",
-        "tslint": "6.1.3",
-        "typedoc": "0.23.23",
-        "typescript": "4.6.4"
+        "del-cli": "5.1.0",
+        "eslint": "8.55.0",
+        "eslint-config-ego": "^0.19.0",
+        "nodemon": "3.0.2",
+        "ts-node": "10.9.2",
+        "typedoc": "0.25.4",
+        "typescript": "4.7.4"
     },
     "dependencies": {
-        "openapi-schema-validator": "12.1.0",
-        "openapi-types": "12.1.0"
+        "openapi-schema-validator": "12.1.3",
+        "openapi-types": "12.1.3"
     },
     "peerDependencies": {
-        "@egomobile/http-server": ">= 0.54.0"
+        "@egomobile/http-server": ">= 0.65.0"
     }
 }

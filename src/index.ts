@@ -48,6 +48,18 @@ export interface IValidateSwaggerDocumentError {
  */
 export interface IValidateSwaggerDocumentOptions {
     /**
+     * Allow to reuse IDs for Swagger operations.
+     *
+     * @default `false`
+     */
+    allowDuplicateOperationIds?: Nilable<boolean>;
+    /**
+     * Allow operations to have no IDs.
+     *
+     * @default `false`
+     */
+    allowNoOperationIds?: Nilable<boolean>;
+    /**
      * Controller methods.
      */
     controllerMethods?: Nilable<IControllerMethodInfo[]>;
@@ -128,6 +140,8 @@ export async function validateSwaggerDocument(options: IValidateSwaggerDocumentO
         documentation,
         "controllerMethods": methods
     } = options;
+    const shouldAllowDuplicateOperationIds = !!options.allowDuplicateOperationIds;
+    const shouldAllowNoOperationIds = !!options.allowNoOperationIds;
 
     if (!isNil(methods)) {
         if (!Array.isArray(methods)) {
@@ -175,6 +189,11 @@ export async function validateSwaggerDocument(options: IValidateSwaggerDocumentO
     }
 
     if (methods?.length) {
+        const alreadyUsedOperationIds: {
+            id: string;
+            method: IControllerMethodInfo;
+        }[] = [];
+
         for (const controllerMethod of methods) {
             const { method, rawPath } = controllerMethod;
 
@@ -200,6 +219,60 @@ export async function validateSwaggerDocument(options: IValidateSwaggerDocumentO
                         message
                     });
                 };
+
+                // operation IDs
+                if (isNil(operation.operationId)) {
+                    if (!shouldAllowNoOperationIds) {
+                        // we need an operation ID here
+                        addOperationError("operation.operationId", "No ID");
+                    }
+                }
+                else {
+                    const {
+                        operationId
+                    } = operation;
+
+                    if (operationId === "string") {
+                        const addOperationId = () => {
+                            alreadyUsedOperationIds.push({
+                                "id": operationId,
+                                "method": controllerMethod
+                            });
+                        };
+
+                        if (shouldAllowDuplicateOperationIds) {
+                            // duplicates allowed
+                            addOperationId();
+                        }
+                        else {
+                            const existingOperationIdEntry = alreadyUsedOperationIds.find(({
+                                id
+                            }) => {
+                                return operationId === id;
+                            });
+
+                            if (existingOperationIdEntry) {
+                                // we have a non allowed duplicate
+
+                                const {
+                                    "method": otherControllerMethod
+                                } = existingOperationIdEntry;
+
+                                addOperationError(
+                                    "operation.operationId",
+                                    `Operation ID already defined for '${otherControllerMethod.name}' in '${otherControllerMethod.controller.__file}'`
+                                );
+                            }
+                            else {
+                                addOperationId();
+                            }
+                        }
+                    }
+                    else {
+                        // invalid data type
+                        addOperationError("operation.operationId", "ID is no string");
+                    }
+                }
 
                 const operationSummary = operation.summary || "";
                 if (!isSummaryValid(operationSummary)) {
